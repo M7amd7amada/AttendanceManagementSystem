@@ -15,6 +15,12 @@ public static class Extensions
 
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.DefaultApiVersion = ApiVersion.Default;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+        });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -1,5 +1,5 @@
 
-namespace AttendanceManagementSystem.Api.Controllers;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1;
 
 public class AttendancesController : BaseController
 {

@@ -1,7 +1,8 @@
-namespace AttendanceManagementSystem.Api.Controllers;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class BaseController : ControllerBase
 {
     protected readonly IUnitOfWork _unitOfWork;

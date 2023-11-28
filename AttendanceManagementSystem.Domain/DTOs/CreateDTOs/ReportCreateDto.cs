@@ -1,6 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+
+using AttendanceManagementSystem.Domain.Models.Enums;
+
 namespace AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
 
-public class ReportCreateDto
+public record ReportCreateDto
 {
+    [Required]
+    public DateTime ReportDate { get; set; }
 
+    [Required]
+    public ReportType ReportType { get; set; }
+
+    [Required]
+    public required string ReportDetails { get; set; }
 }

@@ -1,4 +1,4 @@
-namespace AttendanceManagementSystem.Api.Controllers;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1;
 public class UsersController : BaseController
 {
     private readonly IUsersRepository _users;
