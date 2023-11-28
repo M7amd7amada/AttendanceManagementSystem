@@ -1,105 +1,152 @@
+using System.Dynamic;
 using System.Linq.Expressions;
 
 using AttendanceManagementSystem.DataAccess.Data;
+using AttendanceManagementSystem.Domain.Consts;
 using AttendanceManagementSystem.Domain.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class RepositoryBase<T>(AppDbContext context) : IRepositoryBase<T> where T : class
+public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    protected readonly AppDbContext _context = context;
-
-    public Task<bool> AddAsync(T entity)
+    protected readonly AppDbContext _context;
+    protected readonly DbSet<T> _data;
+    public RepositoryBase(AppDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+        _data = _context.Set<T>();
     }
 
-    public Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+    private async Task<bool> Complete() => await _context.SaveChangesAsync() > 0;
+
+    public async Task<bool> AddAsync(T entity)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entity);
+
+        await _data.AddAsync(entity);
+        return await Complete();
     }
 
-    public Task Attach(T entity)
+    public async Task<bool> AddRangeAsync(IEnumerable<T> entities)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entities);
+
+        await _data.AddRangeAsync(entities);
+        return await Complete();
     }
 
-    public Task AttachRange(IEnumerable<T> entities)
+    public void Attach(T entity)
     {
-        throw new NotImplementedException();
+        _data.Attach(entity);
     }
 
-    public Task<int> CountAsync()
+    public void AttachRange(IEnumerable<T> entities)
     {
-        throw new NotImplementedException();
+        _data.AttachRange(entities);
     }
 
-    public Task<int> CountAsync(Expression<Func<T, bool>> criteria)
+    public async Task<int> CountAsync()
     {
-        throw new NotImplementedException();
+        return await _data.CountAsync();
     }
 
-    public Task<bool> Delete(T entity)
+    public async Task<int> CountAsync(Expression<Func<T, bool>> criteria)
     {
-        throw new NotImplementedException();
+        return await _data.CountAsync(criteria);
     }
 
-    public Task<bool> DeleteRange(IEnumerable<T> entities)
+    public async Task<bool> Delete(T entity)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entity);
+
+        _data.Remove(entity);
+        return await Complete();
     }
 
-    public Task<IEnumerable<T>> FindAllAsync(
+    public async Task<bool> DeleteRange(IEnumerable<T> entities)
+    {
+        ArgumentNullException.ThrowIfNull(entities);
+
+        _data.RemoveRange(entities);
+        return await Complete();
+    }
+
+    public async Task<IEnumerable<T>> FindAllAsync(
         Expression<Func<T, bool>> criteria,
         string[] includes = null!)
     {
-        throw new NotImplementedException();
+        IQueryable<T> query = _context.Set<T>();
+
+        if (includes != null)
+            foreach (var include in includes)
+                query = query.Include(include);
+
+        return await query.Where(criteria).ToListAsync();
     }
 
-    public Task<IEnumerable<T>> FindAllAsync(
+    public async Task<IEnumerable<T>> FindAllAsync(
         Expression<Func<T, bool>> criteria,
         int skip,
         int take)
     {
-        throw new NotImplementedException();
+        return await _context.Set<T>().Where(criteria).Skip(skip).Take(take).ToListAsync();
     }
 
-    public Task<IEnumerable<T>> FindAllAsync(
+    public async Task<IEnumerable<T>> FindAllAsync(
         Expression<Func<T, bool>> criteria,
         int? skip,
         int? take,
         Expression<Func<T, object>> orderBy = null!,
-        string orderByDirection = "ASC")
+        string orderByDirection = OrderBy.Ascending)
     {
-        throw new NotImplementedException();
+        IQueryable<T> query = _context.Set<T>().Where(criteria);
+
+        if (take.HasValue)
+            query = query.Take(take.Value);
+
+        if (skip.HasValue)
+            query = query.Skip(skip.Value);
+
+        if (orderBy != null)
+        {
+            query = orderByDirection == OrderBy.Ascending
+                ? query.OrderBy(orderBy)
+                : (IQueryable<T>)query.OrderByDescending(orderBy);
+        }
+        return await query.ToListAsync();
     }
 
-    public Task<T> FindAsync(
+    public async Task<T> FindAsync(
         Expression<Func<T, bool>> criteria,
         string[] includes = null!)
     {
-        throw new NotImplementedException();
+        IQueryable<T> query = _context.Set<T>();
+
+        if (includes != null)
+            foreach (var incluse in includes)
+                query = query.Include(incluse);
+
+        return await query.SingleOrDefaultAsync(criteria)
+                    ?? throw new ArgumentNullException(nameof(criteria));
     }
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _context.Set<T>().ToListAsync();
+        return await _data.ToListAsync();
     }
 
-    public Task<T> GetByIdAsync(Guid id)
+    public async Task<T> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _data.FindAsync(id)
+            ?? throw new ArgumentNullException();
     }
 
-    public Task<T> Update(T entity)
+    public async Task<bool> Update(T entity)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Upsert(T entity)
-    {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entity);
+        _data.Update(entity);
+        return await Complete();
     }
 }

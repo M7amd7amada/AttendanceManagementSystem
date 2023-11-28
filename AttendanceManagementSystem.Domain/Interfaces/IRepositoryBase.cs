@@ -30,14 +30,12 @@ public interface IRepositoryBase<T> where T : class
 
     public Task<bool> AddAsync(T entity);
 
-    public Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
-
-    public Task<T> Update(T entity);
-    public Task<bool> Upsert(T entity);
+    public Task<bool> AddRangeAsync(IEnumerable<T> entities);
+    public Task<bool> Update(T entity);
     public Task<bool> Delete(T entity);
     public Task<bool> DeleteRange(IEnumerable<T> entities);
-    public Task Attach(T entity);
-    public Task AttachRange(IEnumerable<T> entities);
+    public void Attach(T entity);
+    public void AttachRange(IEnumerable<T> entities);
     public Task<int> CountAsync();
     public Task<int> CountAsync(Expression<Func<T, bool>> criteria);
 
