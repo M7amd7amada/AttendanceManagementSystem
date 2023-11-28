@@ -30,8 +30,8 @@ public class SeedData(AppDbContext context)
                         new Attendance
                         {
                             DayOfWeek = DaysOfWeek.Tuesday,
-                            ClockInTime = new TimeOnly(9, 0),
-                            ClockOutTime = new TimeOnly(18, 0),
+                            AttendanceTime = new TimeOnly(9, 0),
+                            DepartureTime = new TimeOnly(18, 0),
                             AttendanceReports = new List<AttendanceReport>
                             {
                                 new AttendanceReport
@@ -108,8 +108,8 @@ public class SeedData(AppDbContext context)
                         new Attendance
                         {
                             DayOfWeek = DaysOfWeek.Monday,
-                            ClockInTime = new TimeOnly(8, 0),
-                            ClockOutTime = new TimeOnly(17, 0),
+                            AttendanceTime = new TimeOnly(8, 0),
+                            DepartureTime = new TimeOnly(17, 0),
                             AttendanceReports = new List<AttendanceReport>
                             {
                                 new AttendanceReport

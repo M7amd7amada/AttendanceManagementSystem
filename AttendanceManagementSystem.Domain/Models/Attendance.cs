@@ -5,8 +5,8 @@ namespace AttendanceManagementSystem.Domain.Models;
 public class Attendance : EntityBase
 {
     public DaysOfWeek DayOfWeek { get; set; }
-    public TimeOnly ClockInTime { get; set; }
-    public TimeOnly ClockOutTime { get; set; }
+    public TimeOnly AttendanceTime { get; set; }
+    public TimeOnly DepartureTime { get; set; }
 
     // Relationships
     public Guid UserId { get; set; }

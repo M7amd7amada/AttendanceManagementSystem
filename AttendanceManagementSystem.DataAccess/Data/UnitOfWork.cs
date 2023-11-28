@@ -25,9 +25,9 @@ public class UnitOfWork : IUnitOfWork
     public ILeaveRequestsRepostiory LeaveRequests { get; private set; }
     public IAttendancesRepository Attendances { get; private set; }
 
-    public bool Complete()
+    public async Task<bool> CompleteAsync()
     {
-        return _context.SaveChanges() > 0;
+        return await _context.SaveChangesAsync() > 0;
     }
 
     public void Dispose() => _context.Dispose();

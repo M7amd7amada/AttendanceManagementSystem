@@ -1,12 +1,12 @@
 namespace AttendanceManagementSystem.Domain.Models.Enums;
 
-public enum DaysOfWeek
+public enum DaysOfWeek : byte
 {
-    Saturday,
-    Sunday,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday
+    Saturday = 1,
+    Sunday = 2,
+    Monday = 3,
+    Tuesday = 4,
+    Wednesday = 5,
+    Thursday = 6,
+    Friday = 7
 }

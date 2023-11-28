@@ -1,6 +1,13 @@
+using AttendanceManagementSystem.Domain.Models.Enums;
+
 namespace AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
 
-public class LeaveRequestReadDto
+public record LeaveRequestReadDto
 {
-
+    public Guid Id { get; set; }
+    public LeaveType LeaveType { get; set; }
+    public LeaveStatus LeaveStatus { get; set; }
+    public DateTime LeaveStartDate { get; set; }
+    public DateTime LeaveEndDate { get; set; }
+    public int LeavingDays => (LeaveEndDate - LeaveStartDate).Days;
 }
