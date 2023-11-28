@@ -12,6 +12,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (args.Length == 1 && args[0].Equals("SeedData", StringComparison.CurrentCultureIgnoreCase))
+{
+    app.SeedData();
+}
+
 app.UseHttpsRedirection();
 app.MapControllers();
 

@@ -1,5 +1,6 @@
 using AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
 using AttendanceManagementSystem.Domain.Interfaces;
+using AttendanceManagementSystem.Domain.Models;
 
 using AutoMapper;
 
@@ -30,7 +31,7 @@ public class UsersController : ControllerBase
     {
 
         var users = await _repo.GetAllAsync();
-        var response = _mapper.Map<UserReadDto>(users);
+        var response = _mapper.Map<IEnumerable<UserReadDto>>(users);
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
