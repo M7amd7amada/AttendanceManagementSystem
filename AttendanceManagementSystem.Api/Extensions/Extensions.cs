@@ -13,9 +13,10 @@ public static class Extensions
         string connectionString = builder.Configuration
             .GetConnectionString("SqlServerConnectionString")!;
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddControllers();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         builder.Services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
         builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
