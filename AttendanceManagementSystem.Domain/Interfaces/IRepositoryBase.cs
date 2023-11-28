@@ -8,7 +8,7 @@ public interface IRepositoryBase<T> where T : class
 {
     public Task<T> GetByIdAsync(Guid id);
 
-    public IEnumerable<Task<T>> GetAllAsync();
+    public Task<IEnumerable<T>> GetAllAsync();
 
     public Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null!);
 

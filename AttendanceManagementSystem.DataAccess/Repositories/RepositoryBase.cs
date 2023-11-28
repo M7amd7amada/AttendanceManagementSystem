@@ -1,11 +1,16 @@
 using System.Linq.Expressions;
 
+using AttendanceManagementSystem.DataAccess.Data;
 using AttendanceManagementSystem.Domain.Interfaces;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+public class RepositoryBase<T>(AppDbContext context) : IRepositoryBase<T> where T : class
 {
+    protected readonly AppDbContext _context = context;
+
     public Task<bool> AddAsync(T entity)
     {
         throw new NotImplementedException();
@@ -78,9 +83,9 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Task<T>> GetAllAsync()
+    public async Task<IEnumerable<T>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Set<T>().ToListAsync();
     }
 
     public Task<T> GetByIdAsync(Guid id)
