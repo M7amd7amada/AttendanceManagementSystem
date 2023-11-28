@@ -1,18 +1,12 @@
-using AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
-using AttendanceManagementSystem.Domain.Interfaces;
-
-using AutoMapper;
-
-using Microsoft.AspNetCore.Mvc;
-
 namespace AttendanceManagementSystem.Api.Controllers;
 public class UsersController : BaseController
 {
-    private readonly IUsersRepository _repo;
+    private readonly IUsersRepository _users;
 
-    public UsersController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+    public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
+        : base(unitOfWork, mapper)
     {
-        _repo = unitOfWork.Users;
+        _users = unitOfWork.Users;
     }
 
     [HttpGet]
@@ -21,7 +15,7 @@ public class UsersController : BaseController
     public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsersAsync()
     {
 
-        var users = await _repo.GetAllAsync();
+        var users = await _users.GetAllAsync();
         var response = _mapper.Map<IEnumerable<UserReadDto>>(users);
 
         if (!ModelState.IsValid)

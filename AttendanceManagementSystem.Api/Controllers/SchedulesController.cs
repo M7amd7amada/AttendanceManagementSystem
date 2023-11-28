@@ -1,19 +1,12 @@
-using AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
-using AttendanceManagementSystem.Domain.Interfaces;
-
-using AutoMapper;
-
-using Microsoft.AspNetCore.Mvc;
-
-
 namespace AttendanceManagementSystem.Api.Controllers;
 
 public class SchedulesController : BaseController
 {
-    private readonly ISchedulesRepository _repo;
-    public SchedulesController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+    private readonly ISchedulesRepository _schedules;
+    public SchedulesController(IUnitOfWork unitOfWork, IMapper mapper)
+        : base(unitOfWork, mapper)
     {
-        _repo = unitOfWork.Schedules;
+        _schedules = unitOfWork.Schedules;
     }
 
     [HttpGet]
@@ -21,7 +14,7 @@ public class SchedulesController : BaseController
     [ProducesResponseType(200)]
     public async Task<ActionResult<IEnumerable<ScheduleReadDto>>> GetAllAsync()
     {
-        var schedules = await _repo.GetAllAsync();
+        var schedules = await _schedules.GetAllAsync();
         var response = _mapper.Map<IEnumerable<ScheduleReadDto>>(schedules);
 
         if (!ModelState.IsValid)
