@@ -1,4 +1,3 @@
-using System.Dynamic;
 using System.Linq.Expressions;
 
 using AttendanceManagementSystem.DataAccess.Data;
@@ -19,14 +18,14 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         _data = _context.Set<T>();
     }
 
-    private async Task<bool> Complete() => await _context.SaveChangesAsync() > 0;
+    private async Task<bool> CompleteAsync() => await _context.SaveChangesAsync() > 0;
 
     public async Task<bool> AddAsync(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         await _data.AddAsync(entity);
-        return await Complete();
+        return await CompleteAsync();
     }
 
     public async Task<bool> AddRangeAsync(IEnumerable<T> entities)
@@ -34,7 +33,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         ArgumentNullException.ThrowIfNull(entities);
 
         await _data.AddRangeAsync(entities);
-        return await Complete();
+        return await CompleteAsync();
     }
 
     public void Attach(T entity)
@@ -57,20 +56,20 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         return await _data.CountAsync(criteria);
     }
 
-    public async Task<bool> Delete(T entity)
+    public async Task<bool> DeleteAsync(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         _data.Remove(entity);
-        return await Complete();
+        return await CompleteAsync();
     }
 
-    public async Task<bool> DeleteRange(IEnumerable<T> entities)
+    public async Task<bool> DeleteRangeAsync(IEnumerable<T> entities)
     {
         ArgumentNullException.ThrowIfNull(entities);
 
         _data.RemoveRange(entities);
-        return await Complete();
+        return await CompleteAsync();
     }
 
     public async Task<IEnumerable<T>> FindAllAsync(
@@ -143,10 +142,29 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             ?? throw new ArgumentNullException();
     }
 
-    public async Task<bool> Update(T entity)
+    public async Task<bool> UpdateAsync(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         _data.Update(entity);
-        return await Complete();
+        return await CompleteAsync();
+    }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _data.AnyAsync(e => GetEntityId(e) == id);
+    }
+
+    public async Task<bool> UpsertAsync(T entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        if (await ExistsAsync(GetEntityId(entity)))
+            await UpdateAsync(entity);
+        await AddAsync(entity);
+        return await CompleteAsync();
+    }
+
+    private Guid GetEntityId(T entity)
+    {
+        return (Guid)entity.GetType().GetProperty("Id")!.GetValue(entity)!;
     }
 }

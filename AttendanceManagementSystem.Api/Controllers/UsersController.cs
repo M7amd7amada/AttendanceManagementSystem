@@ -21,6 +21,7 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("GetAll")]
+    [ProducesResponseType(200)]
     public async Task<ActionResult<IEnumerable<User>>> GetAllUsersAsync()
     {
         return Ok(await _repo.GetAllAsync());
