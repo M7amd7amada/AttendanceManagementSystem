@@ -1,8 +1,6 @@
 using System.Linq.Expressions;
 
-using AttendanceManagementSystem.DataAccess.Data;
 using AttendanceManagementSystem.Domain.Consts;
-using AttendanceManagementSystem.Domain.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 

@@ -6,6 +6,8 @@ builder.ConfigureServices();
 
 var app = builder.Build();
 
+app.UseExceptionHandler(ex => ex.ConfigureExceptionHanlder());
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

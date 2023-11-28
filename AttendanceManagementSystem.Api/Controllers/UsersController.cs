@@ -1,27 +1,18 @@
 using AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
 using AttendanceManagementSystem.Domain.Interfaces;
-using AttendanceManagementSystem.Domain.Models;
 
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceManagementSystem.Api.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class UsersController : ControllerBase
+public class UsersController : BaseController
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly IUsersRepository _repo;
 
-    public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
+    public UsersController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-
-        _repo = _unitOfWork.Users;
+        _repo = unitOfWork.Users;
     }
 
     [HttpGet]
