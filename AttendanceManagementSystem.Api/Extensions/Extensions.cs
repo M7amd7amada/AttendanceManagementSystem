@@ -1,8 +1,13 @@
+using System.Text;
+
+using AttendanceManagementSystem.Api.Configurations.Models;
 using AttendanceManagementSystem.DataAccess.Data;
 using AttendanceManagementSystem.DataAccess.Repositories;
-using AttendanceManagementSystem.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AttendanceManagementSystem.Api.Extensions;
 
@@ -12,6 +17,32 @@ public static class Extensions
     {
         string connectionString = builder.Configuration
             .GetConnectionString("SqlServerConnectionString")!;
+        var jwtConfig = builder.Configuration.GetSection("JwtConfig");
+
+        builder.Services.Configure<JwtConfig>(jwtConfig);
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(jwt =>
+        {
+            var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]!);
+            jwt.SaveToken = true;
+            jwt.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateLifetime = true,
+                ValidateIssuer = false,         // ToDo Update
+                ValidateAudience = false,       // ToDo Update
+                RequireExpirationTime = false   // ToDo Update
+            };
+        });
+        builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            options.SignIn.RequireConfirmedEmail = true)
+        .AddEntityFrameworkStores<AppDbContext>();
 
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();

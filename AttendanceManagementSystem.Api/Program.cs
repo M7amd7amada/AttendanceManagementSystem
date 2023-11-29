@@ -20,6 +20,10 @@ if (args.Length == 1 && args[0].Equals("SeedData", StringComparison.CurrentCultu
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
