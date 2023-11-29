@@ -7,6 +7,9 @@ namespace AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
 public record ReportCreateDto
 {
     [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
     public DateTime ReportDate { get; set; }
 
     [Required]

@@ -16,22 +16,18 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         _data = _context.Set<T>();
     }
 
-    private async Task<bool> CompleteAsync() => await _context.SaveChangesAsync() > 0;
-
-    public async Task<bool> AddAsync(T entity)
+    public async Task AddAsync(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         await _data.AddAsync(entity);
-        return await CompleteAsync();
     }
 
-    public async Task<bool> AddRangeAsync(IEnumerable<T> entities)
+    public async Task AddRangeAsync(IEnumerable<T> entities)
     {
         ArgumentNullException.ThrowIfNull(entities);
 
         await _data.AddRangeAsync(entities);
-        return await CompleteAsync();
     }
 
     public void Attach(T entity)
@@ -54,20 +50,18 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         return await _data.CountAsync(criteria);
     }
 
-    public async Task<bool> DeleteAsync(T entity)
+    public void Delete(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         _data.Remove(entity);
-        return await CompleteAsync();
     }
 
-    public async Task<bool> DeleteRangeAsync(IEnumerable<T> entities)
+    public void DeleteRange(IEnumerable<T> entities)
     {
         ArgumentNullException.ThrowIfNull(entities);
 
         _data.RemoveRange(entities);
-        return await CompleteAsync();
     }
 
     public async Task<IEnumerable<T>> FindAllAsync(
@@ -88,7 +82,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         int skip,
         int take)
     {
-        return await _context.Set<T>().Where(criteria).Skip(skip).Take(take).ToListAsync();
+        return await _context.Set<T>()
+            .Where(criteria)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<T>> FindAllAsync(
@@ -140,11 +138,10 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             ?? throw new ArgumentNullException();
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+    public void Update(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         _data.Update(entity);
-        return await CompleteAsync();
     }
 
     public async Task<bool> ExistsAsync(Guid id)
@@ -152,13 +149,12 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         return await _data.AnyAsync(e => GetEntityId(e) == id);
     }
 
-    public async Task<bool> UpsertAsync(T entity)
+    public async Task UpsertAsync(T entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         if (await ExistsAsync(GetEntityId(entity)))
-            await UpdateAsync(entity);
+            Update(entity);
         await AddAsync(entity);
-        return await CompleteAsync();
     }
 
     private Guid GetEntityId(T entity)

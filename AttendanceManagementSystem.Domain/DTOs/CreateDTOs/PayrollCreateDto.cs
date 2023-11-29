@@ -6,6 +6,9 @@ namespace AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
 public record PayrollCreateDto
 {
     [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
     public DateOnly PayPeriodStart { get; set; }
 
     [Required]

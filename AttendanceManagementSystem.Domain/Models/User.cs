@@ -4,6 +4,8 @@ namespace AttendanceManagementSystem.Domain.Models;
 
 public class User : EntityBase
 {
+    public Guid IdentityId { get; set; }
+
     [Required]
     [StringLength(50)]
     public required string FirstName { get; set; }

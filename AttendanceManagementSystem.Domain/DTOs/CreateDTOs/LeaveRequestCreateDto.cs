@@ -7,6 +7,9 @@ namespace AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
 public record LeaveRequestCreateDto
 {
     [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
     public LeaveType LeaveType { get; set; }
 
     [Required]

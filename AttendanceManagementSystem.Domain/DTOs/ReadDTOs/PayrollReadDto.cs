@@ -3,6 +3,7 @@ namespace AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
 public record PayrollReadDto
 {
     public Guid Id { get; set; }
+    public Guid UserId { get; set; }
     public DateOnly PayPeriodStart { get; set; }
     public DateOnly PayPeriodEnd { get; set; }
     public decimal BaseSalary { get; set; }

@@ -1,4 +1,3 @@
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -6,6 +5,7 @@ using System.Text;
 using AttendanceManagementSystem.Authentication.Configurations;
 using AttendanceManagementSystem.Authentication.DTOs.CreateDTOs;
 using AttendanceManagementSystem.Authentication.DTOs.ReadDTOs;
+using AttendanceManagementSystem.Domain.Models;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -17,6 +17,7 @@ public class AccountsController : BaseController
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly JwtConfig _jwtConfig;
+    private readonly IUsersRepository _users;
     public AccountsController(
         IUnitOfWork unitOfWork,
         IMapper mapper,
@@ -25,13 +26,15 @@ public class AccountsController : BaseController
     {
         _userManager = userManager;
         _jwtConfig = optionsMonitor.CurrentValue;
+        _users = _unitOfWork.Users;
     }
 
     [HttpPost]
     [Route("Register")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> Registration([FromBody] UserRegistrationRequestCreateDto userDto)
+    public async Task<IActionResult> Registration(
+        [FromBody] UserRegistrationRequestCreateDto userDto)
     {
         if (!ModelState.IsValid)
         {
@@ -73,6 +76,11 @@ public class AccountsController : BaseController
                 Errors = isCreated.Errors.Select(x => x.Description).ToList()
             });
         }
+
+        var userEntity = _mapper.Map<User>(userDto);
+        userEntity.IdentityId = new Guid(newUser.Id);
+        await _users.AddAsync(userEntity);
+        await _unitOfWork.CompleteAsync();
 
         // Create Jwt Token
         var token = GenerateJwtToken(newUser);
