@@ -6,6 +6,7 @@ using AttendanceManagementSystem.Authentication.Configurations;
 using AttendanceManagementSystem.Authentication.DTOs.CreateDTOs;
 using AttendanceManagementSystem.Authentication.DTOs.ReadDTOs;
 using AttendanceManagementSystem.Domain.Models;
+using AttendanceManagementSystem.Domain.Models.Enums;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -16,17 +17,22 @@ namespace AttendanceManagementSystem.Api.Controllers.Version_1.Authentication;
 public class AccountsController : BaseController
 {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly TokenValidationParameters _tokenValidationParameters;
     private readonly JwtConfig _jwtConfig;
     private readonly IUsersRepository _users;
+    private readonly IRefreshTokensRepository _refreshTokens;
     public AccountsController(
         IUnitOfWork unitOfWork,
         IMapper mapper,
         UserManager<IdentityUser> userManager,
-        IOptionsMonitor<JwtConfig> optionsMonitor) : base(unitOfWork, mapper)
+        IOptionsMonitor<JwtConfig> optionsMonitor,
+        TokenValidationParameters tokenValidationParameters) : base(unitOfWork, mapper)
     {
         _userManager = userManager;
         _jwtConfig = optionsMonitor.CurrentValue;
         _users = _unitOfWork.Users;
+        _refreshTokens = _unitOfWork.RefreshTokens;
+        _tokenValidationParameters = tokenValidationParameters;
     }
 
     [HttpPost]
@@ -83,7 +89,7 @@ public class AccountsController : BaseController
         await _unitOfWork.CompleteAsync();
 
         // Create Jwt Token
-        var token = GenerateJwtToken(newUser);
+        var token = await GenerateJwtToken(newUser);
 
         return Ok(new UserRegistrationResponseReadDto
         {
@@ -128,7 +134,8 @@ public class AccountsController : BaseController
             });
         }
 
-        var jwtToken = GenerateJwtToken(userExist);
+        var jwtToken = await GenerateJwtToken(userExist);
+
         return Ok(new UserLoginRequestReadDto
         {
             Success = true,
@@ -136,8 +143,7 @@ public class AccountsController : BaseController
         });
     }
 
-
-    private string GenerateJwtToken(IdentityUser user)
+    private async Task<string> GenerateJwtToken(IdentityUser user)
     {
         var jwtHanlder = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret!);
@@ -161,6 +167,36 @@ public class AccountsController : BaseController
         var token = jwtHanlder.CreateToken(tokenDescriptor);
 
         // * Convert this security token to sting and returns is back 
-        return jwtHanlder.WriteToken(token);
+        var jwtToken = jwtHanlder.WriteToken(token);
+
+        // * Generate refresh token
+        var refreshToken = new RefreshToken
+        {
+            CreatedDate = DateTime.UtcNow,
+            Token = $"{GenerateRandomString(32)}_{Guid.NewGuid()}",
+            UserId = user.Id,
+            IsRevoked = false,
+            IsUsed = false,
+            Status = Status.Active,
+            JwtId = token.Id,
+            ExpiryDate = DateTime.UtcNow.AddMonths(6)
+        };
+
+        await _refreshTokens.AddAsync(refreshToken);
+        await _unitOfWork.CompleteAsync();
+
+        return jwtToken;
+    }
+
+    private static string GenerateRandomString(int length)
+    {
+        var random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYz0123456789";
+
+        return new string(
+            Enumerable.Repeat(chars, length)
+                .Select(str => str[random.Next(str.Length)])
+                .ToArray()
+        );
     }
 }
