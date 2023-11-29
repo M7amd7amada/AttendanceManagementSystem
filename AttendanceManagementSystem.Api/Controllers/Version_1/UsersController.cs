@@ -12,6 +12,7 @@ public class UsersController : BaseController
     [HttpGet]
     [Route("GetAll")]
     [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
     public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsersAsync()
     {
 
