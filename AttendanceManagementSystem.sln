@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttendanceManagementSystem.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttendanceManagementSystem.Domain", "AttendanceManagementSystem.Domain\AttendanceManagementSystem.Domain.csproj", "{DB6E9419-96DE-49AE-BD25-4C6A95DB2372}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttendanceManagementSystem.Authentication", "AttendanceManagementSystem.Authentication\AttendanceManagementSystem.Authentication.csproj", "{47D9309F-DD70-4D12-BF4B-54EF980B0B2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{DB6E9419-96DE-49AE-BD25-4C6A95DB2372}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB6E9419-96DE-49AE-BD25-4C6A95DB2372}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB6E9419-96DE-49AE-BD25-4C6A95DB2372}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47D9309F-DD70-4D12-BF4B-54EF980B0B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47D9309F-DD70-4D12-BF4B-54EF980B0B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47D9309F-DD70-4D12-BF4B-54EF980B0B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47D9309F-DD70-4D12-BF4B-54EF980B0B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

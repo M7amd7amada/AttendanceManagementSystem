@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AttendanceManagementSystem.DataAccess\AttendanceManagementSystem.DataAccess.csproj" />
     <ProjectReference Include="..\AttendanceManagementSystem.Domain\AttendanceManagementSystem.Domain.csproj" />
+    <ProjectReference Include="..\AttendanceManagementSystem.Authentication\AttendanceManagementSystem.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

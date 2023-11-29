@@ -8,6 +8,8 @@ public class SeedData(AppDbContext context)
     private readonly AppDbContext _context = context;
     public void Seed()
     {
+        if (_context.Users is null) throw new ArgumentNullException(nameof(_context));
+
         if (!_context.Users.Any())
         {
             Console.WriteLine("---> Seeding Data...");

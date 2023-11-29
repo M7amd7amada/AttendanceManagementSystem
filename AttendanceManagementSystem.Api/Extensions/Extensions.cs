@@ -1,13 +1,13 @@
 using System.Text;
 
-using AttendanceManagementSystem.Api.Configurations.Models;
 using AttendanceManagementSystem.DataAccess.Data;
 using AttendanceManagementSystem.DataAccess.Repositories;
-using Microsoft.IdentityModel.Tokens;
+using AttendanceManagementSystem.Authentication.Configurations;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AttendanceManagementSystem.Api.Extensions;
 
