@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1.Authentication;
 
 public class AccountsController : BaseController
 {
@@ -91,6 +91,51 @@ public class AccountsController : BaseController
             Token = token
         });
     }
+
+    [HttpPost]
+    [Route("Login")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> Login(
+        [FromBody] UserLoginRequestCreateDto userDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new UserLoginRequestReadDto
+            {
+                Success = false,
+                Errors = [" Invalid Payload "]
+            });
+        }
+
+        var userExist = await _userManager.FindByEmailAsync(userDto.Email);
+        if (userExist is null)
+        {
+            return BadRequest(new UserLoginRequestReadDto
+            {
+                Success = false,
+                Errors = [" Inavlid Authentication Request "]
+            });
+        }
+
+        var isPasswordCorrect = await _userManager.CheckPasswordAsync(userExist, userDto.Password);
+        if (!isPasswordCorrect)
+        {
+            return BadRequest(new UserLoginRequestReadDto
+            {
+                Success = false,
+                Errors = [" Wrong Password!! "]
+            });
+        }
+
+        var jwtToken = GenerateJwtToken(userExist);
+        return Ok(new UserLoginRequestReadDto
+        {
+            Success = true,
+            Token = jwtToken
+        });
+    }
+
 
     private string GenerateJwtToken(IdentityUser user)
     {

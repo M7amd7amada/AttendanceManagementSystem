@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+
 namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UsersController : BaseController
 {
     private readonly IUsersRepository _users;
