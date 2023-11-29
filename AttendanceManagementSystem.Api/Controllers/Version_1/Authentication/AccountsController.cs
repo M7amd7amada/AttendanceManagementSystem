@@ -150,7 +150,7 @@ public class AccountsController : BaseController
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             }),
-            Expires = DateTime.UtcNow.AddHours(3), // TODO Update this to minutes
+            Expires = DateTime.UtcNow.Add(_jwtConfig.ExpiryTimeFrame),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature // TODO Review The Alogrithm

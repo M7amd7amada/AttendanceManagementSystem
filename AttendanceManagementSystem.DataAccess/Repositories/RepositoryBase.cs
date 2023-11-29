@@ -3,16 +3,19 @@ using System.Linq.Expressions;
 using AttendanceManagementSystem.Domain.Consts;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
     protected readonly AppDbContext _context;
+    protected readonly ILogger _logger;
     protected readonly DbSet<T> _data;
-    public RepositoryBase(AppDbContext context)
+    public RepositoryBase(AppDbContext context, ILogger logger)
     {
         _context = context;
+        _logger = logger;
         _data = _context.Set<T>();
     }
 

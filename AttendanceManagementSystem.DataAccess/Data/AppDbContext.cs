@@ -8,6 +8,7 @@ namespace AttendanceManagementSystem.DataAccess.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext(options)
 {
     public new DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Attendance> Attendances { get; set; }
     public DbSet<LeaveRequest> LeaveRequests { get; set; }
     public DbSet<Payroll> Payrolls { get; set; }

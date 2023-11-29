@@ -1,8 +1,10 @@
 
+using Microsoft.Extensions.Logging;
+
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class LeaveRequestsRepository(AppDbContext context)
-    : RepositoryBase<LeaveRequest>(context),
+public class LeaveRequestsRepository(AppDbContext context, ILogger logger)
+    : RepositoryBase<LeaveRequest>(context, logger),
         ILeaveRequestsRepostiory
 {
     public int LeaveRequestsCount => throw new NotImplementedException();

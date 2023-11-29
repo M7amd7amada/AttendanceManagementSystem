@@ -18,6 +18,16 @@ public static class Extensions
         string connectionString = builder.Configuration
             .GetConnectionString("SqlServerConnectionString")!;
         var jwtConfig = builder.Configuration.GetSection("JwtConfig");
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]!);
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateLifetime = true,
+            ValidateIssuer = false,         // ToDo Update
+            ValidateAudience = false,       // ToDo Update
+            RequireExpirationTime = false   // ToDo Update
+        };
 
         builder.Services.Configure<JwtConfig>(jwtConfig);
         builder.Services.AddAuthentication(options =>
@@ -28,17 +38,8 @@ public static class Extensions
         })
         .AddJwtBearer(jwt =>
         {
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]!);
             jwt.SaveToken = true;
-            jwt.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateLifetime = true,
-                ValidateIssuer = false,         // ToDo Update
-                ValidateAudience = false,       // ToDo Update
-                RequireExpirationTime = false   // ToDo Update
-            };
+            jwt.TokenValidationParameters = tokenValidationParameters;
         });
         builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             options.SignIn.RequireConfirmedEmail = true)
@@ -58,6 +59,7 @@ public static class Extensions
         builder.Services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
         builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
         builder.Services.AddTransient<SeedData>();
+        builder.Services.AddSingleton(tokenValidationParameters);
 
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(

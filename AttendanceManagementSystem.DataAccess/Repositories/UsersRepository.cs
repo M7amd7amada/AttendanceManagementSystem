@@ -1,8 +1,10 @@
 
+using Microsoft.Extensions.Logging;
+
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class UsersRepository(AppDbContext context)
-    : RepositoryBase<User>(context),
+public class UsersRepository(AppDbContext context, ILogger logger)
+    : RepositoryBase<User>(context, logger),
         IUsersRepository
 {
     public Task AssignAttendance(Guid id)

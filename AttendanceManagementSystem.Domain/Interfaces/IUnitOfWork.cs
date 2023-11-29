@@ -8,5 +8,6 @@ public interface IUnitOfWork : IDisposable
     public IPayrollsRepository Payrolls { get; }
     public ILeaveRequestsRepostiory LeaveRequests { get; }
     public IAttendancesRepository Attendances { get; }
+    public IRefreshTokensRepository RefreshTokens { get; }
     public Task<bool> CompleteAsync();
 }

@@ -1,10 +1,11 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class SchedulesRepository(AppDbContext context)
-    : RepositoryBase<Schedule>(context),
+public class SchedulesRepository(AppDbContext context, ILogger logger)
+    : RepositoryBase<Schedule>(context, logger),
         ISchedulesRepository
 {
     private readonly DbSet<Schedule> _schedules = context.Schedules;

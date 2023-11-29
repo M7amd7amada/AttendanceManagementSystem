@@ -1,8 +1,10 @@
 
+using Microsoft.Extensions.Logging;
+
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class ReportsRepository(AppDbContext context)
-    : RepositoryBase<Report>(context),
+public class ReportsRepository(AppDbContext context, ILogger logger)
+    : RepositoryBase<Report>(context, logger),
         IReportsRepository
 {
     public Task GenerateAttendancesReport()
