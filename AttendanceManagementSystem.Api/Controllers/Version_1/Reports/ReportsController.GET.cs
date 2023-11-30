@@ -1,6 +1,6 @@
-namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1.Reports;
 
-public class ReportsController : BaseController
+public partial class ReportsController : BaseController
 {
     private readonly IReportsRepository _reports;
     public ReportsController(IUnitOfWork unitOfWork, IMapper mapper)

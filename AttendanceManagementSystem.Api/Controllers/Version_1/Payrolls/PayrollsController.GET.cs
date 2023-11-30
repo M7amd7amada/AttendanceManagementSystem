@@ -1,7 +1,7 @@
 
-namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1.Payrolls;
 
-public class PayrollsController : BaseController
+public partial class PayrollsController : BaseController
 {
     private readonly IPayrollsRepository _payrolls;
     public PayrollsController(IUnitOfWork unitOfWork, IMapper mapper)

@@ -1,7 +1,7 @@
 
-namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1.Attendances;
 
-public class AttendancesController : BaseController
+public partial class AttendancesController : BaseController
 {
     private readonly IAttendancesRepository _attendances;
     public AttendancesController(IUnitOfWork unitOfWork, IMapper mapper)

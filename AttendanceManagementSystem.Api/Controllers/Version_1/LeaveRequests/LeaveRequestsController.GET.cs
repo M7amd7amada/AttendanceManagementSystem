@@ -1,7 +1,7 @@
 
-namespace AttendanceManagementSystem.Api.Controllers.Version_1;
+namespace AttendanceManagementSystem.Api.Controllers.Version_1.LeaveRequests;
 
-public class LeaveRequestsController : BaseController
+public partial class LeaveRequestsController : BaseController
 {
     private readonly ILeaveRequestsRepostiory _leaveRequests;
     public LeaveRequestsController(IUnitOfWork unitOfWork, IMapper mapper)

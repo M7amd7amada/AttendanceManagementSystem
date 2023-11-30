@@ -10,5 +10,5 @@ public class Schedule : EntityBase
     public List<DaysOfWeek>? WorkDays { get; set; }
 
     // Relationships
-    public User? User { get; set; }
+    public ICollection<User>? Users { get; set; }
 }

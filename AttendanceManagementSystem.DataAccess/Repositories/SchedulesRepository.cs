@@ -1,4 +1,6 @@
 
+using AttendanceManagementSystem.Domain.Models.Enums;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -8,18 +10,23 @@ public class SchedulesRepository(AppDbContext context, ILogger logger)
     : RepositoryBase<Schedule>(context, logger),
         ISchedulesRepository
 {
-    private readonly DbSet<Schedule> _schedules = context.Schedules;
-    private readonly DbSet<User> _users = context.Users;
-
-    public int WorkingHoursCount => throw new NotImplementedException();
-
-    public int WorkingDaysCount => throw new NotImplementedException();
-
-    public async Task<IEnumerable<Guid>> GetUsers(Guid scheduleId)
+    public async Task<int> GetWorkingHoursCount(Guid id)
     {
-        return await _users
-            .Where(user => user.Id == scheduleId)
-            .Select(user => user.Id)
-            .ToListAsync();
+        var schedule = await GetByIdAsync(id);
+
+        ArgumentNullException.ThrowIfNull(schedule);
+
+        var result = (schedule.EndTime - schedule.StartTime).Hours;
+        return result;
+    }
+    public async Task<int> GetWorkingDaysCount(Guid id)
+    {
+        var schedule = await GetByIdAsync(id);
+
+        ArgumentNullException.ThrowIfNull(schedule);
+
+        var result = (schedule.WorkDays
+            ?? Enumerable.Empty<DaysOfWeek>()).Count();
+        return result;
     }
 }
