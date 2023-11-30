@@ -16,13 +16,13 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
         _logger = loggerFactory.CreateLogger("db_logs");
 
-        Users = new UsersRepository(_context);
-        Schedules = new SchedulesRepository(_context);
-        Reports = new ReportsRepository(_context);
-        Payrolls = new PayrollsRepository(_context);
-        LeaveRequests = new LeaveRequestsRepository(_context);
-        Attendances = new AttendancesRepository(_context);
-        RefreshTokens = new RefreshTokensRepository(_context);
+        Users = new UsersRepository(_context, _logger);
+        Schedules = new SchedulesRepository(_context, _logger);
+        Reports = new ReportsRepository(_context, _logger);
+        Payrolls = new PayrollsRepository(_context, _logger);
+        LeaveRequests = new LeaveRequestsRepository(_context, _logger);
+        Attendances = new AttendancesRepository(_context, _logger);
+        RefreshTokens = new RefreshTokensRepository(_context, _logger);
     }
 
     public IUsersRepository Users { get; private set; }
