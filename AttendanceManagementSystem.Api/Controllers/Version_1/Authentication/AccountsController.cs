@@ -85,6 +85,7 @@ public class AccountsController : BaseController
         }
 
         var userEntity = _mapper.Map<User>(userDto);
+        userEntity.ScheduleId = new Guid("0dcb08c0-ebe9-459b-8a15-3e5067930cf7");
         userEntity.IdentityId = new Guid(newUser.Id);
         await _users.AddAsync(userEntity);
         await _unitOfWork.CompleteAsync();

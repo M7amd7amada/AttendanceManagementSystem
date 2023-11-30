@@ -28,5 +28,5 @@ public class User : EntityBase
     public ICollection<Attendance>? Attendances { get; set; }
     public ICollection<LeaveRequest>? LeaveRequests { get; set; }
     public ICollection<Payroll>? Payrolls { get; set; }
-    public ICollection<Report>? Reports { get; set; }
+    public ICollection<UserReport>? UserReports { get; set; }
 }

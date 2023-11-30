@@ -10,54 +10,59 @@ namespace AttendanceManagementSystem.DataAccess.Repositories;
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
     protected readonly AppDbContext _context;
+    protected readonly IUnitOfWork _unitOfWork;
     protected readonly ILogger _logger;
-    protected readonly DbSet<T> _data;
-    public RepositoryBase(AppDbContext context, ILogger logger)
+    protected readonly DbSet<T> _entities;
+    public RepositoryBase(
+        AppDbContext context,
+        ILogger logger,
+        IUnitOfWork unitOfWork)
     {
         _context = context;
         _logger = logger;
-        _data = _context.Set<T>();
+        _unitOfWork = unitOfWork;
+        _entities = _context.Set<T>();
     }
 
     public async Task AddAsync(T entity)
     {
-        await _data.AddAsync(entity);
+        await _entities.AddAsync(entity);
     }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
 
-        await _data.AddRangeAsync(entities);
+        await _entities.AddRangeAsync(entities);
     }
 
     public void Attach(T entity)
     {
-        _data.Attach(entity);
+        _entities.Attach(entity);
     }
 
     public void AttachRange(IEnumerable<T> entities)
     {
-        _data.AttachRange(entities);
+        _entities.AttachRange(entities);
     }
 
     public async Task<int> CountAsync()
     {
-        return await _data.CountAsync();
+        return await _entities.CountAsync();
     }
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> criteria)
     {
-        return await _data.CountAsync(criteria);
+        return await _entities.CountAsync(criteria);
     }
 
     public void Delete(T entity)
     {
-        _data.Remove(entity);
+        _entities.Remove(entity);
     }
 
     public void DeleteRange(IEnumerable<T> entities)
     {
-        _data.RemoveRange(entities);
+        _entities.RemoveRange(entities);
     }
 
     public async Task<IEnumerable<T>> FindAllAsync(
@@ -124,22 +129,22 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public async Task<IEnumerable<T>?> GetAllAsync()
     {
-        return await _data.ToListAsync();
+        return await _entities.ToListAsync();
     }
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _data.FindAsync(id);
+        return await _entities.FindAsync(id);
     }
 
     public void Update(T entity)
     {
-        _data.Update(entity);
+        _entities.Update(entity);
     }
 
     public async Task<bool> ExistsAsync(Guid id)
     {
-        return await _data.AnyAsync(e => GetEntityId(e) == id);
+        return await _entities.AnyAsync(e => GetEntityId(e) == id);
     }
 
     public async Task UpsertAsync(T entity)

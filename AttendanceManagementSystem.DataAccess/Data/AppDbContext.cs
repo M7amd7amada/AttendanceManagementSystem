@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<PayrollReport> PayrollReports { get; set; }
     public DbSet<AttendanceReport> AttendanceReports { get; set; }
     public DbSet<LeaveRequestReport> LeaveRequestReports { get; set; }
+    public DbSet<UserReport> UserReports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,5 +31,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
         modelBuilder.Entity<LeaveRequestReport>()
             .HasKey(x => new { x.ReportId, x.LeaveRequestId });
+
+        modelBuilder.Entity<UserReport>()
+            .HasKey(x => new { x.ReportId, x.UserId });
     }
 }

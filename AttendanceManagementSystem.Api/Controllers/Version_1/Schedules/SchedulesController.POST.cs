@@ -25,7 +25,7 @@ public partial class SchedulesController
 
     [HttpPost]
     [Route("CreateSchedules")]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> AddRange(
         IEnumerable<ScheduleCreateDto> scheduleDtos)
@@ -39,6 +39,6 @@ public partial class SchedulesController
         await _schedules.AddRangeAsync(schedules);
         await _unitOfWork.CompleteAsync();
 
-        return CreatedAtRoute(nameof(GetAll), schedules);
+        return Ok(); // TODO Make it return 201 Created
     }
 }

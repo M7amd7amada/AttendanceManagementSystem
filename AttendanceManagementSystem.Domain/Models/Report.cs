@@ -11,7 +11,7 @@ public class Report : EntityBase
     public string? ReportDetails { get; set; }
 
     // Relationships
-    public Guid User { get; set; }
+    public ICollection<UserReport>? UsreReports { get; set; }
     public ICollection<LeaveRequestReport>? LeaveRequestReports { get; set; }
     public ICollection<AttendanceReport>? AttendanceReports { get; set; }
     public ICollection<PayrollReport>? PayrollReports { get; set; }

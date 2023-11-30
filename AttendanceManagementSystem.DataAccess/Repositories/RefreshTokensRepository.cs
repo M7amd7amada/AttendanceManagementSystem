@@ -4,15 +4,21 @@ using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class RefreshTokensRepository(AppDbContext context, ILogger logger)
-    : RepositoryBase<RefreshToken>(context, logger),
+public class RefreshTokensRepository : RepositoryBase<RefreshToken>,
         IRefreshTokensRepository
 {
+    public RefreshTokensRepository(
+        AppDbContext context,
+        ILogger logger,
+        IUnitOfWork unitOfWork) : base(context, logger, unitOfWork)
+    {
+    }
+
     public async Task<RefreshToken> GetByRefreshTokenAsync(string refreshToken)
     {
         try
         {
-            var res = await _data.Where(x => x.Token == refreshToken)
+            var res = await _entities.Where(x => x.Token == refreshToken)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
@@ -33,7 +39,7 @@ public class RefreshTokensRepository(AppDbContext context, ILogger logger)
     {
         try
         {
-            var token = await _data.Where(x => x.Token == refreshToken.Token)
+            var token = await _entities.Where(x => x.Token == refreshToken.Token)
                 .FirstOrDefaultAsync();
 
             if (token is null) return false;

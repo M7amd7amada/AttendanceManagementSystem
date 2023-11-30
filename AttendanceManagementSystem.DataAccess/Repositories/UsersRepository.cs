@@ -3,13 +3,35 @@ using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class UsersRepository(AppDbContext context, ILogger logger)
-    : RepositoryBase<User>(context, logger),
+public class UsersRepository : RepositoryBase<User>,
         IUsersRepository
 {
-    public Task AssignAttendance(Guid id)
+    private readonly IAttendancesRepository _attendances;
+
+    public UsersRepository(
+        AppDbContext context,
+        ILogger logger,
+        IUnitOfWork unitOfWork) : base(context, logger, unitOfWork)
     {
-        throw new NotImplementedException();
+        _attendances = _unitOfWork.Attendances;
+    }
+
+    public async Task CreateUser(User user, Guid scheduleId)
+    {
+        user.ScheduleId = scheduleId;
+        await AddAsync(user);
+    }
+
+    public async Task AssignAttendanceAsync(Guid userId, Guid attendanceId)
+    {
+        var user = await GetByIdAsync(userId);
+        ArgumentNullException.ThrowIfNull(user);
+
+        var attendance = await _attendances.GetByIdAsync(attendanceId);
+        ArgumentNullException.ThrowIfNull(attendance);
+
+        (user.Attendances
+            ?? Enumerable.Empty<Attendance>()).ToList().Add(attendance);
     }
 
     public Task GenerateReport(Guid id)
@@ -17,14 +39,23 @@ public class UsersRepository(AppDbContext context, ILogger logger)
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Attendance>> GetAttendances(Guid id)
+    public async Task<IEnumerable<Attendance>> GetAttendancesAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        var user = await GetByIdAsync(userId);
+        ArgumentNullException.ThrowIfNull(user);
+
+        return (user.Attendances
+            ?? Enumerable.Empty<Attendance>()).OrderByDescending(a => a.CreatedDate).ToList();
     }
 
-    public Task<Attendance> GetCurrentAttendance(Guid id)
+    public async Task<Attendance> GetCurrentAttendance(Guid userId)
     {
-        throw new NotImplementedException();
+        var attendances = await GetAttendancesAsync(userId);
+        var lastAttendance = attendances.FirstOrDefault();
+
+        ArgumentNullException.ThrowIfNull(lastAttendance);
+
+        return lastAttendance;
     }
 
     public Task<Payroll> GetLastPayroll(Guid id)
@@ -57,8 +88,12 @@ public class UsersRepository(AppDbContext context, ILogger logger)
         throw new NotImplementedException();
     }
 
-    public Task SubscribeToSchedule(Guid id)
+    public async Task SubscribeToSchedule(Guid userId, Guid scheduleId)
     {
-        throw new NotImplementedException();
+        var user = await GetByIdAsync(userId);
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.ScheduleId = scheduleId;
     }
 }

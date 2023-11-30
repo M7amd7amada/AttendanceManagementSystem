@@ -6,11 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
 
-public class SchedulesRepository(AppDbContext context, ILogger logger)
-    : RepositoryBase<Schedule>(context, logger),
+public class SchedulesRepository : RepositoryBase<Schedule>,
         ISchedulesRepository
 {
-    public async Task<int> GetWorkingHoursCount(Guid id)
+    public SchedulesRepository(
+        AppDbContext context,
+        ILogger logger,
+        IUnitOfWork unitOfWork) : base(context, logger, unitOfWork)
+    {
+    }
+
+    public async Task<int> GetWorkingHoursCountAsync(Guid id)
     {
         var schedule = await GetByIdAsync(id);
 
@@ -19,7 +25,7 @@ public class SchedulesRepository(AppDbContext context, ILogger logger)
         var result = (schedule.EndTime - schedule.StartTime).Hours;
         return result;
     }
-    public async Task<int> GetWorkingDaysCount(Guid id)
+    public async Task<int> GetWorkingDaysCountAsync(Guid id)
     {
         var schedule = await GetByIdAsync(id);
 

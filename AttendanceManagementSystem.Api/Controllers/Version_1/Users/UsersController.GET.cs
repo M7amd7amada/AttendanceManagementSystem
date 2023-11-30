@@ -22,11 +22,14 @@ public partial class UsersController : BaseController
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<UserReadDto>> GetUser(Guid id)
+    public async Task<ActionResult<UserReadDto>> GetByIdAsync(Guid id)
     {
         var user = await _users.GetByIdAsync(id);
 
-        if (user is null) return NotFound();
+        if (user is null)
+            return NotFound();
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
         var response = _mapper.Map<UserReadDto>(user);
 
@@ -38,17 +41,15 @@ public partial class UsersController : BaseController
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllAsync()
     {
-
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
 
         var users = await _users.GetAllAsync();
 
-        if (users is null) return NotFound();
+        if (users is null)
+            return NotFound();
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
         var response = _mapper.Map<IEnumerable<UserReadDto>>(users);
 

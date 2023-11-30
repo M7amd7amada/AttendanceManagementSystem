@@ -8,7 +8,6 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
     private readonly ILogger _logger;
-
     public UnitOfWork(
         AppDbContext context,
         ILoggerFactory loggerFactory)
@@ -16,13 +15,13 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
         _logger = loggerFactory.CreateLogger("db_logs");
 
-        Users = new UsersRepository(_context, _logger);
-        Schedules = new SchedulesRepository(_context, _logger);
-        Reports = new ReportsRepository(_context, _logger);
-        Payrolls = new PayrollsRepository(_context, _logger);
-        LeaveRequests = new LeaveRequestsRepository(_context, _logger);
-        Attendances = new AttendancesRepository(_context, _logger);
-        RefreshTokens = new RefreshTokensRepository(_context, _logger);
+        Users = new UsersRepository(_context, _logger, this);
+        Schedules = new SchedulesRepository(_context, _logger, this);
+        Reports = new ReportsRepository(_context, _logger, this);
+        Payrolls = new PayrollsRepository(_context, _logger, this);
+        LeaveRequests = new LeaveRequestsRepository(_context, _logger, this);
+        Attendances = new AttendancesRepository(_context, _logger, this);
+        RefreshTokens = new RefreshTokensRepository(_context, _logger, this);
     }
 
     public IUsersRepository Users { get; private set; }
