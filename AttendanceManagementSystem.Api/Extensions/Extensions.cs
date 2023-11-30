@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace AttendanceManagementSystem.Api.Extensions;
 
@@ -45,7 +46,35 @@ public static class Extensions
             options.SignIn.RequireConfirmedEmail = true)
         .AddEntityFrameworkStores<AppDbContext>();
 
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(opt =>
+        {
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "AttendanceMS.Api", Version = "v1" });
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
+
         builder.Services.AddControllers();
         builder.Services.AddApiVersioning(options =>
         {

@@ -12,9 +12,7 @@ public class RefreshTokensRepository(AppDbContext context, ILogger logger)
     {
         try
         {
-            var res = await _data.Where(x => x.Token.Equals(
-                    refreshToken,
-                    StringComparison.CurrentCultureIgnoreCase))
+            var res = await _data.Where(x => x.Token == refreshToken)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
@@ -35,9 +33,7 @@ public class RefreshTokensRepository(AppDbContext context, ILogger logger)
     {
         try
         {
-            var token = await _data.Where(x => x.Token.Equals(
-                    refreshToken.Token,
-                    StringComparison.CurrentCultureIgnoreCase))
+            var token = await _data.Where(x => x.Token == refreshToken.Token)
                 .FirstOrDefaultAsync();
 
             if (token is null) return false;
