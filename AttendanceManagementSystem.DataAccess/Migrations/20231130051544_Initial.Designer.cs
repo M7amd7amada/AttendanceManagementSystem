@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceManagementSystem.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231129090709_Initial")]
+    [Migration("20231130051544_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,8 +31,8 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeOnly>("AttendanceTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("AttendanceTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -40,8 +40,8 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Property<byte>("DayOfWeek")
                         .HasColumnType("tinyint");
 
-                    b.Property<TimeOnly>("DepartureTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -141,11 +141,11 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("PayPeriodStart")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PayPeriodStart")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("PayPerionEnd")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PayPerionEnd")
+                        .HasColumnType("datetime2");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -182,6 +182,48 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.HasIndex("PayrollId");
 
                     b.ToTable("PayrollReports");
+                });
+
+            modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JwtId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.Report", b =>
@@ -230,11 +272,11 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -242,17 +284,10 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("WorkDays")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Schedules");
                 });
@@ -289,6 +324,9 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
@@ -296,6 +334,9 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ScheduleId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -582,6 +623,15 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Navigation("Report");
                 });
 
+            modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.Report", b =>
                 {
                     b.HasOne("AttendanceManagementSystem.Domain.Models.User", null)
@@ -589,11 +639,11 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.Schedule", b =>
+            modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.User", b =>
                 {
-                    b.HasOne("AttendanceManagementSystem.Domain.Models.User", null)
-                        .WithOne("Schedule")
-                        .HasForeignKey("AttendanceManagementSystem.Domain.Models.Schedule", "UserId")
+                    b.HasOne("AttendanceManagementSystem.Domain.Models.Schedule", null)
+                        .WithOne("User")
+                        .HasForeignKey("AttendanceManagementSystem.Domain.Models.User", "ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -673,6 +723,11 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Navigation("PayrollReports");
                 });
 
+            modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.Schedule", b =>
+                {
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AttendanceManagementSystem.Domain.Models.User", b =>
                 {
                     b.Navigation("Attendances");
@@ -682,9 +737,6 @@ namespace AttendanceManagementSystem.DataAccess.Migrations
                     b.Navigation("Payrolls");
 
                     b.Navigation("Reports");
-
-                    b.Navigation("Schedule")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

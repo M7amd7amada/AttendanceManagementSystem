@@ -2,10 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 using AttendanceManagementSystem.Domain.Models.Enums;
 
-namespace AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
+namespace AttendanceManagementSystem.Domain.DTOs.UpdateDTOs;
 
-public record ScheduleCreateDto
+public class ScheduleUpdateDto
 {
+    [Required]
+    public Guid Id { get; set; }
+
     [Required]
     public List<DaysOfWeek>? WorkDays { get; set; }
 
@@ -14,4 +17,5 @@ public record ScheduleCreateDto
 
     [Required]
     public DateTime Endtime { get; set; }
+
 }

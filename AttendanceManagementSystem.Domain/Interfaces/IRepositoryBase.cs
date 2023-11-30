@@ -6,11 +6,13 @@ namespace AttendanceManagementSystem.Domain.Interfaces;
 
 public interface IRepositoryBase<T> where T : class
 {
-    public Task<T> GetByIdAsync(Guid id);
+    public Task<T?> GetByIdAsync(Guid id);
 
-    public Task<IEnumerable<T>> GetAllAsync();
+    public Task<IEnumerable<T>?> GetAllAsync();
 
-    public Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null!);
+    public Task<T?> FindAsync(
+        Expression<Func<T, bool>> criteria,
+        string[] includes = null!);
 
     public Task<IEnumerable<T>> FindAllAsync(
         Expression<Func<T, bool>> criteria,

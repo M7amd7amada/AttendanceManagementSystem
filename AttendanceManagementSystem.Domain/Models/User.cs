@@ -24,7 +24,7 @@ public class User : EntityBase
 
 
     // Relationships
-    public Schedule Schedule { get; set; } = null!;
+    public Guid ScheduleId { get; set; }
     public ICollection<Attendance>? Attendances { get; set; }
     public ICollection<LeaveRequest>? LeaveRequests { get; set; }
     public ICollection<Payroll>? Payrolls { get; set; }

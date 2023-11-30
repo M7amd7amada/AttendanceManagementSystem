@@ -12,6 +12,41 @@ public class UsersRepository(AppDbContext context, ILogger logger)
         throw new NotImplementedException();
     }
 
+    public Task GenerateReport(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Attendance>> GetAttendances(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Attendance> GetCurrentAttendance(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Payroll> GetLastPayroll(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Payroll>> GetPayrolls(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Report>> GetReports(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Schedule> GetSchedule(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task ProvideLeaveRequest(Guid id)
     {
         throw new NotImplementedException();

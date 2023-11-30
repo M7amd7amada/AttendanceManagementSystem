@@ -21,19 +21,14 @@ public class SeedData(AppDbContext context)
                     LastName = "Smith",
                     Email = "jane.smith@example.com",
                     Phone = "987-654-3210",
-                    Schedule = new Schedule
-                    {
-                        StartTime = new TimeOnly(9, 0),
-                        EndTime = new TimeOnly(18, 0),
-                        WorkDays = new List<DaysOfWeek> { DaysOfWeek.Tuesday, DaysOfWeek.Thursday, DaysOfWeek.Saturday }
-                    },
+                    ScheduleId = Guid.NewGuid(),
                     Attendances = new List<Attendance>
                     {
                         new Attendance
                         {
                             DayOfWeek = DaysOfWeek.Tuesday,
-                            AttendanceTime = new TimeOnly(9, 0),
-                            DepartureTime = new TimeOnly(18, 0),
+                            AttendanceTime = new DateTime(9, 0),
+                            DepartureTime = new DateTime(18, 0),
                             AttendanceReports = new List<AttendanceReport>
                             {
                                 new AttendanceReport
@@ -74,8 +69,8 @@ public class SeedData(AppDbContext context)
                     {
                         new Payroll
                         {
-                        PayPeriodStart = new DateOnly(2023, 1, 1),
-                        PayPerionEnd = new DateOnly(2023, 1, 15),
+                        PayPeriodStart = new DateTime(2023, 1, 1),
+                        PayPerionEnd = new DateTime(2023, 1, 15),
                         BaseSalary = 5500.00m,
                         TotalPay = 5000.00m,
                         PayrollReports = new List<PayrollReport>
@@ -85,8 +80,8 @@ public class SeedData(AppDbContext context)
                                     Report = new Report
                                     {
                                         ReportDate = DateTime.UtcNow.Date,
-                                        ReportType = ReportType.Monthly,
-                                        ReportDetails = "Payroll report for Jane Smith."
+            //                             ReportType = ReportType.Monthly,
+            //                             ReportDetails = "Payroll report for Jane Smith."
                                     }
                                 }
                             }
@@ -99,19 +94,14 @@ public class SeedData(AppDbContext context)
                     LastName = "Doe",
                     Email = "john.doe@example.com",
                     Phone = "123-456-7890",
-                    Schedule = new Schedule
-                    {
-                        StartTime = new TimeOnly(8, 0),
-                        EndTime = new TimeOnly(17, 0),
-                        WorkDays = new List<DaysOfWeek> { DaysOfWeek.Monday, DaysOfWeek.Wednesday, DaysOfWeek.Friday }
-                    },
+                    ScheduleId = Guid.NewGuid(),
                     Attendances = new List<Attendance>
                     {
                         new Attendance
                         {
                             DayOfWeek = DaysOfWeek.Monday,
-                            AttendanceTime = new TimeOnly(8, 0),
-                            DepartureTime = new TimeOnly(17, 0),
+                            AttendanceTime = new DateTime(8, 0),
+                            DepartureTime = new DateTime(17, 0),
                             AttendanceReports = new List<AttendanceReport>
                             {
                                 new AttendanceReport
@@ -152,8 +142,8 @@ public class SeedData(AppDbContext context)
                     {
                         new Payroll
                         {
-                            PayPeriodStart = new DateOnly(2023, 1, 1),
-                            PayPerionEnd = new DateOnly(2023, 1, 15),
+                            PayPeriodStart = new DateTime(2023, 1, 1),
+                            PayPerionEnd = new DateTime(2023, 1, 15),
                             BaseSalary = 5000.00m,
                             TotalPay = 4500.00m,
                             PayrollReports = new List<PayrollReport>

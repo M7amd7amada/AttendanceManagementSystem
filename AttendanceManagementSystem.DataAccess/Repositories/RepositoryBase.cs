@@ -21,14 +21,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public async Task AddAsync(T entity)
     {
-        ArgumentNullException.ThrowIfNull(entity);
-
         await _data.AddAsync(entity);
     }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
-        ArgumentNullException.ThrowIfNull(entities);
 
         await _data.AddRangeAsync(entities);
     }
@@ -55,15 +52,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public void Delete(T entity)
     {
-        ArgumentNullException.ThrowIfNull(entity);
-
         _data.Remove(entity);
     }
 
     public void DeleteRange(IEnumerable<T> entities)
     {
-        ArgumentNullException.ThrowIfNull(entities);
-
         _data.RemoveRange(entities);
     }
 
@@ -116,7 +109,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         return await query.ToListAsync();
     }
 
-    public async Task<T> FindAsync(
+    public async Task<T?> FindAsync(
         Expression<Func<T, bool>> criteria,
         string[] includes = null!)
     {
@@ -126,24 +119,21 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             foreach (var incluse in includes)
                 query = query.Include(incluse);
 
-        return await query.SingleOrDefaultAsync(criteria)
-                    ?? throw new ArgumentNullException(nameof(criteria));
+        return await query.SingleOrDefaultAsync(criteria);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<IEnumerable<T>?> GetAllAsync()
     {
         return await _data.ToListAsync();
     }
 
-    public async Task<T> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _data.FindAsync(id)
-            ?? throw new ArgumentNullException();
+        return await _data.FindAsync(id);
     }
 
     public void Update(T entity)
     {
-        ArgumentNullException.ThrowIfNull(entity);
         _data.Update(entity);
     }
 
@@ -154,7 +144,6 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public async Task UpsertAsync(T entity)
     {
-        ArgumentNullException.ThrowIfNull(entity);
         if (await ExistsAsync(GetEntityId(entity)))
             Update(entity);
         await AddAsync(entity);

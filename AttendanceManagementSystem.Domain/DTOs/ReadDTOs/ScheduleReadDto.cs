@@ -6,7 +6,8 @@ namespace AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
 public record ScheduleReadDto
 {
     public Guid Id { get; set; }
-    public List<DaysOfWeek>? WorkingDays { get; set; }
-    public TimeOnly StartTime { get; set; }
-    public TimeOnly EndTime { get; set; }
+    public List<DaysOfWeek>? WorkDays { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public User? User { get; set; }
 }

@@ -4,8 +4,8 @@ namespace AttendanceManagementSystem.Domain.Models;
 
 public class Payroll : EntityBase
 {
-    public DateOnly PayPeriodStart { get; set; }
-    public DateOnly PayPerionEnd { get; set; }
+    public DateTime PayPeriodStart { get; set; }
+    public DateTime PayPerionEnd { get; set; }
 
     [Column(TypeName = "decimal(7, 2)")]
     public decimal BaseSalary { get; set; }

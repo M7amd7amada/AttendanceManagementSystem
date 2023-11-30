@@ -1,5 +1,6 @@
 using AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
 using AttendanceManagementSystem.Domain.DTOs.ReadDTOs;
+using AttendanceManagementSystem.Domain.DTOs.UpdateDTOs;
 
 using AutoMapper;
 
@@ -16,6 +17,7 @@ public class MappingProfiles : Profile
         // Schedules
         CreateMap<Schedule, ScheduleReadDto>();
         CreateMap<ScheduleCreateDto, Schedule>();
+        CreateMap<ScheduleUpdateDto, Schedule>();
 
         // Reports
         CreateMap<Report, ReportReadDto>();
