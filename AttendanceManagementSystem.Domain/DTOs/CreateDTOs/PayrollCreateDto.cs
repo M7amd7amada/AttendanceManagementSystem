@@ -9,10 +9,10 @@ public record PayrollCreateDto
     public Guid UserId { get; set; }
 
     [Required]
-    public DateOnly PayPeriodStart { get; set; }
+    public DateTime PayPeriodStart { get; set; }
 
     [Required]
-    public DateOnly PayPeriodEnd { get; set; }
+    public DateTime PayPeriodEnd { get; set; }
 
     [Required]
     [Column(TypeName = "decimal(7, 2)")]

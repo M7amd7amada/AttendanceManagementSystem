@@ -19,6 +19,11 @@ if (args.Length == 1 && args[0].Equals("SeedData", StringComparison.CurrentCultu
     app.SeedData();
 }
 
+app.UseReDoc(c =>
+{
+    c.DocumentTitle = "REDOC API Documentation";
+    c.SpecUrl = "/swagger/v1/swagger.json";
+});
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

@@ -1,4 +1,6 @@
 
+using AttendanceManagementSystem.Domain.DTOs.CreateDTOs;
+
 using Microsoft.Extensions.Logging;
 
 namespace AttendanceManagementSystem.DataAccess.Repositories;
@@ -13,7 +15,13 @@ public class AttendancesRepository : RepositoryBase<Attendance>,
     {
     }
 
-    public int WorkingHours { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public int WorkingHours => throw new NotImplementedException();
+
+    public async Task CreateAttendance(Attendance attendance, Guid userId)
+    {
+        attendance.UserId = userId;
+        await AddAsync(attendance);
+    }
 
     public Task<IEnumerable<Guid>> GetAllUsers()
     {

@@ -14,6 +14,7 @@ public partial class AttendancesController : BaseController
     [Route("GetAll")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<IEnumerable<AttendanceReadDto>>> GetAllAsync()
     {
@@ -35,6 +36,7 @@ public partial class AttendancesController : BaseController
     [Route("GetAttendance")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<AttendanceReadDto>> GetByIdAsync(Guid id)
     {

@@ -13,8 +13,8 @@ public record AttendanceCreateDto
     public DaysOfWeek DayOfWeek { get; set; }
 
     [Required]
-    public TimeOnly AttendanceTime { get; set; }
+    public DateTime AttendanceTime { get; set; }
 
     [Required]
-    public TimeOnly DepartureTime { get; set; }
+    public DateTime DepartureTime { get; set; }
 }
