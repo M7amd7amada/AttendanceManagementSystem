@@ -1,0 +1,47 @@
+﻿@page "/schedule"
+@inject IScheduleService scheduleService
+@attribute [StreamRendering]
+
+<PageTitle>Schedules</PageTitle>
+
+<h1>Schedules</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (schedules == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Days Of Week</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var schedule in schedules)
+            {
+                <tr>
+                    <td>@schedule.Id</td>
+                    <td>@schedule.WorkDays</td>
+                    <td>@schedule.StartTime</td>
+                    <td>@schedule.EndTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<ScheduleReadDto>? schedules;
+
+    protected override async Task OnInitializedAsync()
+    {
+        schedules = await scheduleService.GetSchedulesAsync();
+    }
+}

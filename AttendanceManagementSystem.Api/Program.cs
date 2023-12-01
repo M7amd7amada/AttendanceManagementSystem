@@ -24,7 +24,10 @@ app.UseReDoc(c =>
     c.DocumentTitle = "REDOC API Documentation";
     c.SpecUrl = "/swagger/v1/swagger.json";
 });
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

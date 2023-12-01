@@ -96,6 +96,14 @@ public static class Extensions
             options.UseSqlServer(
                 connectionString,
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+
+        builder.Services.AddCors(options =>
+            options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                }));
     }
 
     public static void SeedData(this IHost app)
